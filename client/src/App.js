@@ -1,6 +1,6 @@
 import React from 'react';
 import logo from './logo.svg';
-import Customers from './components/customers/customers';
+import Customers from './components/customers/Containers/CustomersContainer';
 import './App.css';
 import { createStore } from "redux";
 import { Provider } from "react-redux";

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import './customers.css'
+import './customers.css';
 import { connect } from "react-redux";
+import Customer from '../Presentational/Customer.js';
 
 const request = require('request');
 class Customers extends Component {
@@ -29,12 +30,21 @@ class Customers extends Component {
 
     render(){
         return (
+            // <div>
+            //     <h2>Customers</h2>
+            //     <ul>
+            //         {
+            //         this.props.customers.map(customer =>
+            //             <li key={customer.id}>{ customer.firstName  }&nbsp;{customer.lastName}</li>)
+            //         }
+            //     </ul>
+            // </div>
             <div>
                 <h2>Customers</h2>
                 <ul>
                     {
                     this.props.customers.map(customer =>
-                        <li key={customer.id}>{ customer.firstName  }&nbsp;{customer.lastName}</li>)
+                        <li key={customer.id}><Customer firstName={customer.firstName} lastName={customer.lastName}></Customer></li>)
                     }
                 </ul>
             </div>
