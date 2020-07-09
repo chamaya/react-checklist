@@ -1,14 +1,9 @@
 import React, {Component} from 'react';
 import './customers.css'
+import { connect } from "react-redux";
 
 const request = require('request');
 class Customers extends Component {
-    constructor(){
-        super();
-        this.state = {
-            customers: []
-        }
-    }
 
     componentDidMount(){
         // var options = {
@@ -21,11 +16,13 @@ class Customers extends Component {
         //     if (error) throw new Error(error);
         //     console.log(response.body);
         //   });
-          
 
         fetch('/api/customers')
             .then(res => res.json())
-            .then(customers => this.setState(   {customers}, () => console.log('Customers fetched...', customers)   ));
+            .then(customers => {
+                this.props.dispatch({type: "SET_CUSTOMERS", customers}); 
+                console.log('Customers fetched...', customers)
+            });
 
 
     }
@@ -35,13 +32,21 @@ class Customers extends Component {
             <div>
                 <h2>Customers</h2>
                 <ul>
-                    {this.state.customers.map(customer =>
-                        <li key={customer.id}>{ customer.firstName  }&nbsp;{customer.lastName}</li>
-                    )}
+                    {
+                    this.props.customers.map(customer =>
+                        <li key={customer.id}>{ customer.firstName  }&nbsp;{customer.lastName}</li>)
+                    }
                 </ul>
             </div>
         );
     }
 }
 
-export default Customers;
+const mapStateToProps = (state) => ({
+    customers: state.customers
+});
+const mapDispatchToProps = (dispatch) => ({
+
+});
+
+export default connect(mapStateToProps)(Customers);
