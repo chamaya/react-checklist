@@ -5,8 +5,9 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "server": "nodemon server.js"
+    "server": "nodemon server.js --experimental-modules"
   },
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/chamaya/react-checklist.git"
@@ -19,6 +20,7 @@
   "homepage": "https://github.com/chamaya/react-checklist#readme",
   "dependencies": {
     "axios": "^0.19.2",
+    "babel-preset-env": "^1.7.0",
     "concurrently": "^5.2.0",
     "express": "^4.17.1",
     "mysql": "^2.18.1"

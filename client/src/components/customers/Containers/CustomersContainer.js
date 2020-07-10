@@ -29,7 +29,7 @@ class Customers extends Component {
                 <ul>
                     {
                     this.props.customers.map(customer =>
-                        <li key={customer.id}><Customer firstName={customer.firstname} lastName={customer.lastname}></Customer></li>)
+                        <li key={customer.id}><Customer firstName={customer.firstName} lastName={customer.lastName}></Customer></li>)
                     }
                 </ul>
             </div>

@@ -1,30 +1,17 @@
-const express = require('express');
-
+import express from 'express';
+import ConnectionObj from "./ConnectionObj.js";
 const app = express();
 
 app.get('/api/customers', (req, res)=>{
     console.log("accessing customers api");
-    const customers = [
-        {id: 1, firstName: 'John', lastName: "Martinez"},
-        {id: 2, firstName: 'Charla', lastName: "Shine"},
-        {id: 3, firstName: 'Steven', lastName: "Lee"},
-    ]
-    //res.json(customers);
-    getRows(res);
+    getCustomerRows(res);
 });
 
 const port = 5000;
 
-function getRows(res){
-    var mysql = require('mysql')
-    var connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'password',
-    database: 'test',
-    //insecureAuth : true
-    })
+function getCustomerRows(res){
 
+    let connection = new ConnectionObj().getConnection();
     connection.connect()
 
     connection.query('SELECT * FROM Customers', function (err, rows, fields) {
