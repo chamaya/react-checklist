@@ -25,11 +25,11 @@ class Customers extends Component {
         console.log(this.props.customers);
         return (
             <div>
-                <h2>Customers</h2>
+                <h2>Customers:</h2>
                 <ul>
                     {
                     this.props.customers.map(customer =>
-                        <li key={customer.id}><Customer firstName={customer.firstName} lastName={customer.lastName}></Customer></li>)
+                        <li key={customer.id}><Customer firstName={customer.firstname} lastName={customer.lastname}></Customer></li>)
                     }
                 </ul>
             </div>
