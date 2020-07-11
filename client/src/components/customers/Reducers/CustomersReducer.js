@@ -8,6 +8,10 @@ function customersReducer(state = initialState, action){
       return {
         customers: action.customers
       }
+    case "ADD_CUSTOMER":
+      return {
+        customers: state.customers.concat([action.customer])
+      }
     default:
       return state;
   }

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import './customers.css';
 import { connect } from "react-redux";
 import Customer from '../Presentational/Customer.js';
+import CustomerInfoContainer from './CustomerInfoContainer'
 
 const request = require('request');
 class Customers extends Component {
@@ -25,6 +26,7 @@ class Customers extends Component {
         console.log(this.props.customers);
         return (
             <div>
+                <CustomerInfoContainer></CustomerInfoContainer>
                 <h2>Customers:</h2>
                 <ul>
                     {
