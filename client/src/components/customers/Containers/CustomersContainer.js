@@ -31,7 +31,8 @@ class Customers extends Component {
                 <ul>
                     {
                     this.props.customers.map(customer =>
-                        <li key={customer.id}><Customer firstName={customer.firstName} lastName={customer.lastName}></Customer></li>)
+                        <li key={customer.id}><Customer firstName={customer.firstName} lastName={customer.lastName} 
+                        deleteCustomer={() => this.props.deleteCustomer(customer)}></Customer></li>)
                     }
                 </ul>
             </div>
@@ -44,7 +45,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    setCustomers: (customersAction) => dispatch(customersAction)
+    setCustomers: (customersAction) => dispatch(customersAction),
+    deleteCustomer: (customer) => dispatch({type:"DELETE_CUSTOMER", id: customer.id})
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Customers);

@@ -10,6 +10,7 @@ app.use(bodyParser.urlencoded({
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Methods", "*")
     next();
   }); 
 
@@ -23,6 +24,13 @@ app.post('/api/customer/', (req, res)=>{
     const {firstName, lastName, email, agent} = req.body;
     insertCustomer(firstName, lastName, email, agent, res);
 });
+app.delete('/api/customer/:id', (req, res)=>{
+    const id = req.params.id;
+    console.log(`deleting customer ${id}`)
+    deleteCustomer(id, res);
+
+}
+);
 
 const port = 5000;
 
@@ -52,6 +60,20 @@ function insertCustomer(firstName, lastName, email, agent, res){
 
         console.log('The solution is: ', rows[0]);
         res.send({id: rows.insertId, firstName, lastName, email, agent});
+    })
+
+    connection.end()
+}
+
+function deleteCustomer(id, res){
+    let connection = new ConnectionObj().getConnection();
+    connection.connect()
+
+    connection.query(`DELETE FROM Customers WHERE id = ${id};`, function (err, rows, fields) {
+        if (err) throw err
+
+        console.log('The solution is: ', rows[0]);
+        res.send({message:`Deleted Customer ${id}`});
     })
 
     connection.end()
