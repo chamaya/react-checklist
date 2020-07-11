@@ -6,7 +6,12 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
-  })); 
+}));
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  }); 
 
 app.get('/api/customers', (req, res)=>{
     console.log("accessing customers api");
@@ -29,7 +34,7 @@ function getCustomerRows(res){
     connection.query('SELECT * FROM Customers', function (err, rows, fields) {
         if (err) throw err
 
-        console.log('The solution is: ', rows[0])
+        console.log('The solution is: ', rows)
         res.send(rows);
     })
 
@@ -45,8 +50,8 @@ function insertCustomer(firstName, lastName, email, agent, res){
     VALUES ("${firstName}", "${lastName}", "${email}", ${agent});`, function (err, rows, fields) {
         if (err) throw err
 
-        console.log('The solution is: ', rows[0])
-        res.send({firstName, lastName, email, agent, id: rows.insertId});
+        console.log('The solution is: ', rows[0]);
+        res.send({id: rows.insertId, firstName, lastName, email, agent});
     })
 
     connection.end()
