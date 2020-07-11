@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import ConnectionObj from "./ConnectionObj.js";
+import {getCustomerRows, deleteCustomer, insertCustomer} from "./CustomerQueries.js";
 
 const app = express();
 app.use(bodyParser.json());
@@ -29,54 +29,8 @@ app.delete('/api/customer/:id', (req, res)=>{
     console.log(`deleting customer ${id}`)
     deleteCustomer(id, res);
 
-}
-);
+});
 
 const port = 5000;
-
-function getCustomerRows(res){
-
-    let connection = new ConnectionObj().getConnection();
-    connection.connect()
-
-    connection.query('SELECT * FROM Customers', function (err, rows, fields) {
-        if (err) throw err
-
-        console.log('The solution is: ', rows)
-        res.send(rows);
-    })
-
-    connection.end()
-}
-
-function insertCustomer(firstName, lastName, email, agent, res){
-
-    let connection = new ConnectionObj().getConnection();
-    connection.connect()
-
-    connection.query(`INSERT INTO Customers (firstname, lastname, email, agent) 
-    VALUES ("${firstName}", "${lastName}", "${email}", ${agent});`, function (err, rows, fields) {
-        if (err) throw err
-
-        console.log('The solution is: ', rows[0]);
-        res.send({id: rows.insertId, firstName, lastName, email, agent});
-    })
-
-    connection.end()
-}
-
-function deleteCustomer(id, res){
-    let connection = new ConnectionObj().getConnection();
-    connection.connect()
-
-    connection.query(`DELETE FROM Customers WHERE id = ${id};`, function (err, rows, fields) {
-        if (err) throw err
-
-        console.log('The solution is: ', rows[0]);
-        res.send({message:`Deleted Customer ${id}`});
-    })
-
-    connection.end()
-}
 
 app.listen(port, () => console.log(`Server started on port ${port}`));

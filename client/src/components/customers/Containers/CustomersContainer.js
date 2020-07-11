@@ -17,7 +17,7 @@ class Customers extends Component {
         fetch('/api/customers')
             .then(res => res.json())
             .then(customers => {
-                this.props.setCustomers({type: "SET_CUSTOMERS", customers}); 
+                this.props.setCustomers(customers); 
                 console.log('Customers fetched...', customers)
             });
     }
@@ -45,7 +45,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    setCustomers: (customersAction) => dispatch(customersAction),
+    setCustomers: (customers) => dispatch({type: "SET_CUSTOMERS", customers}),
     deleteCustomer: (customer) => dispatch({type:"DELETE_CUSTOMER", id: customer.id})
 });
 
