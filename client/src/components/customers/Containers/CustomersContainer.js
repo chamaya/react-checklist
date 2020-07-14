@@ -4,49 +4,76 @@ import './customers.css';
 import { connect } from "react-redux";
 import Customer from '../Presentational/Customer.js';
 import CustomerInfoContainer from './CustomerInfoContainer'
+import { setCustomers, deleteCustomer } from "../Actions/CustomersActions"
 
-const request = require('request');
 class Customers extends Component {
 
     static propTypes = {
         setCustomers: PropTypes.func.isRequired,
-        customers: PropTypes.array.isRequired
+        customers: PropTypes.array.isRequired,
+        loadingSetCustomers: PropTypes.bool.isRequired,
+        setCustomersError: PropTypes.object
     }
 
     componentDidMount(){
-        fetch('/api/customers')
-            .then(res => res.json())
-            .then(customers => {
-                this.props.setCustomers(customers); 
-                console.log('Customers fetched...', customers)
-            });
+        this.props.setCustomers();
+    }
+
+    deleteCustomer(id){
+        var requestOptions = {
+            method: 'DELETE',
+            redirect: 'follow'
+        };
+        fetch(`/api/customer/${id}`, requestOptions)
+        .then(res => res.json())
+        .then(response => {
+            console.log(response.message);
+            this.props.deleteCustomer(id);
+        })
+        .catch(error => console.log('error', error));
+    }
+
+    customersBody(){
+        const { setCustomersError, customers, loadingSetCustomers } = this.props;
+        if (setCustomersError) {
+            return <div>Error! {setCustomersError.message}</div>;
+        }
+      
+        if (loadingSetCustomers) {
+            return <div>Loading...</div>;
+        }
+        return(
+        <ul>
+            {customers.map(customer =>
+                <li key={customer.id}>
+                    <Customer firstName={customer.firstName} lastName={customer.lastName} 
+                        deleteCustomer={() => this.deleteCustomer(customer.id)}>
+                    </Customer>
+                </li>)}
+        </ul>
+        )
     }
 
     render(){
-        console.log(this.props.customers);
         return (
             <div>
                 <CustomerInfoContainer></CustomerInfoContainer>
                 <h2>Customers:</h2>
-                <ul>
-                    {
-                    this.props.customers.map(customer =>
-                        <li key={customer.id}><Customer firstName={customer.firstName} lastName={customer.lastName} 
-                        deleteCustomer={() => this.props.deleteCustomer(customer)}></Customer></li>)
-                    }
-                </ul>
+                {this.customersBody()}
             </div>
         );
     }
 }
 
 const mapStateToProps = (state) => ({
-    customers: state.customers.customers
+    customers: state.customers.customers,
+    loadingSetCustomers: state.customers.loadingSetCustomers,
+    setCustomersError: state.customers.setCustomersError
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    setCustomers: (customers) => dispatch({type: "SET_CUSTOMERS", customers}),
-    deleteCustomer: (customer) => dispatch({type:"DELETE_CUSTOMER", id: customer.id})
+    setCustomers: () => dispatch( setCustomers() ),
+    deleteCustomer: (id) => dispatch( deleteCustomer(id) )
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Customers);

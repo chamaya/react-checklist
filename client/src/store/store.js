@@ -1,10 +1,11 @@
-import { createStore } from "redux";
+import { createStore, applyMiddleware } from "redux";
+import thunk from "redux-thunk";
 import appReducer from "./AppReducers.js";
 
 class store{
     
     constructor(){
-        this.storeObj = createStore(this.getReducers());
+        this.storeObj = createStore(this.getReducers(), applyMiddleware(thunk));
     }
 
     getStore(){
@@ -12,7 +13,6 @@ class store{
     }
 
     getReducers(){
-        //add reducers here as they are created
         return appReducer;
     }
 }
