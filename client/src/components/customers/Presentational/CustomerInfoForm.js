@@ -2,7 +2,7 @@ import React from 'react'
 import { Field, reduxForm } from 'redux-form'
 
 let CustomerInfoForm = props => {
-    const { handleSubmit } = props
+    const { handleSubmit, isAdding } = props
     return (
       <form onSubmit={handleSubmit}>
         <div>
@@ -17,7 +17,7 @@ let CustomerInfoForm = props => {
           <label htmlFor="email">Email</label>
           <Field name="email" component="input" type="email" />
         </div>
-        <button type="submit">Submit</button>
+        <button type="submit">Submit</button> { isAdding ? "PROCESSING": "" }
       </form>
     )
 }

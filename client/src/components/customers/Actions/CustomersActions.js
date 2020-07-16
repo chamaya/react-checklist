@@ -1,17 +1,14 @@
-const request = require('request');
 export const SET_CUSTOMERS_BEGIN = "SET_CUSTOMERS_BEGIN";
 export const SET_CUSTOMERS_SUCCESS = "SET_CUSTOMERS_SUCCESS";
 export const SET_CUSTOMERS_FAILURE = "SET_CUSTOMERS_FAILURE";
-//TODO: remove and uncomment 
 export const DELETE_CUSTOMER_BEGIN = "DELETE_CUSTOMER_BEGIN";
 export const DELETE_CUSTOMER_SUCCESS = "DELETE_CUSTOMER_SUCCESS";
 export const DELETE_CUSTOMER_FAILURE = "DELETE_CUSTOMER_FAILURE";
-//TODO: remove and uncomment 
-export const ADD_CUSTOMER = "ADD_CUSTOMER";
-// export const ADD_CUSTOMER_BEGIN = "ADD_CUSTOMER_BEGIN";
-// export const ADD_CUSTOMER_SUCCESS = "ADD_CUSTOMER_SUCCESS";
-// export const ADD_CUSTOMER_FAILURE = "ADD_CUSTOMER_FAILURE";
+export const ADD_CUSTOMER_BEGIN = "ADD_CUSTOMER_BEGIN";
+export const ADD_CUSTOMER_SUCCESS = "ADD_CUSTOMER_SUCCESS";
+export const ADD_CUSTOMER_FAILURE = "ADD_CUSTOMER_FAILURE";
 
+const request = require('request');
 //Set Customer set of API calls
 export function setCustomers(){
   return async (dispatch, getState) =>{
@@ -67,9 +64,33 @@ const deleteCustomerSuccess = (id) => ({
 const deleteCustomerFailure = (error, id) => ({
   type: DELETE_CUSTOMER_FAILURE, error, id
 });
+
 //Add  Customer set of API calls
 export function addCustomer(customer){
-  return {
-    type:ADD_CUSTOMER, customer
+  return async (dispatch, getState) => {
+    dispatch(addCustomerBegin())
+    var options = {
+      'method': 'POST',
+      'url': 'http://localhost:5000/api/customer/',
+      'headers': {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(customer)
+    };
+    request(options, function (error, response) {
+      if (error) dispatch(addCustomerFailure());
+      const customerResponse = JSON.parse(response.body);
+      console.log("Added Customer: ", customerResponse);
+      dispatch(addCustomerSuccess(customerResponse));
+    });
   }
 }
+const addCustomerBegin = ()=>({
+    type : ADD_CUSTOMER_BEGIN
+});
+const addCustomerSuccess = (customer)=>({
+    type:ADD_CUSTOMER_SUCCESS, customer
+});
+const addCustomerFailure = ()=>({
+    type:ADD_CUSTOMER_FAILURE
+});
