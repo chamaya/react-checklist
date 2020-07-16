@@ -2,9 +2,11 @@ import React, {Component} from 'react';
 
 class Customer extends Component {
     render(){
+        const {firstName, lastName, onDeleteCustomer, isDeleting} = this.props;
         return (
-            <div>{ this.props.firstName }&nbsp;{ this.props.lastName }
-            <button onClick={this.props.deleteCustomer}>DELETE</button>
+            <div>{ firstName }&nbsp;{lastName }
+            <button onClick={ onDeleteCustomer }>DELETE</button>
+            { isDeleting ? "PROCESSING": "" }
             </div>
         );
     }

@@ -23,7 +23,7 @@ function deleteCustomer(id, res){
         if (err) throw err
 
         console.log('The solution is: ', rows[0]);
-        res.send({message:`Deleted Customer ${id}`});
+        res.send({message:`Deleted Customer ${id}`, deletedId: id});
     });
 }
 

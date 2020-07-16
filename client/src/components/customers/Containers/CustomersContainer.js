@@ -11,35 +11,22 @@ class Customers extends Component {
     static propTypes = {
         setCustomers: PropTypes.func.isRequired,
         customers: PropTypes.array.isRequired,
-        loadingSetCustomers: PropTypes.bool.isRequired,
-        setCustomersError: PropTypes.object
+        isLoadingSetCustomers: PropTypes.bool.isRequired,
+        setCustomersError: PropTypes.object,
+        deletingCustomers: PropTypes.array.isRequired
     }
 
     componentDidMount(){
         this.props.setCustomers();
     }
 
-    deleteCustomer(id){
-        var requestOptions = {
-            method: 'DELETE',
-            redirect: 'follow'
-        };
-        fetch(`/api/customer/${id}`, requestOptions)
-        .then(res => res.json())
-        .then(response => {
-            console.log(response.message);
-            this.props.deleteCustomer(id);
-        })
-        .catch(error => console.log('error', error));
-    }
-
     customersBody(){
-        const { setCustomersError, customers, loadingSetCustomers } = this.props;
+        const { setCustomersError, customers, isLoadingSetCustomers, deletingCustomers } = this.props;
         if (setCustomersError) {
             return <div>Error! {setCustomersError.message}</div>;
         }
       
-        if (loadingSetCustomers) {
+        if (isLoadingSetCustomers) {
             return <div>Loading...</div>;
         }
         return(
@@ -47,7 +34,9 @@ class Customers extends Component {
             {customers.map(customer =>
                 <li key={customer.id}>
                     <Customer firstName={customer.firstName} lastName={customer.lastName} 
-                        deleteCustomer={() => this.deleteCustomer(customer.id)}>
+                        onDeleteCustomer={() => this.props.deleteCustomer(customer.id)}
+                        isDeleting = {deletingCustomers.includes(customer.id)}
+                        >
                     </Customer>
                 </li>)}
         </ul>
@@ -67,13 +56,14 @@ class Customers extends Component {
 
 const mapStateToProps = (state) => ({
     customers: state.customers.customers,
-    loadingSetCustomers: state.customers.loadingSetCustomers,
-    setCustomersError: state.customers.setCustomersError
+    isLoadingSetCustomers: state.customers.isLoadingSetCustomers,
+    setCustomersError: state.customers.setCustomersError,
+    deletingCustomers: state.customers.deletingCustomers
 });
 
 const mapDispatchToProps = (dispatch) => ({
     setCustomers: () => dispatch( setCustomers() ),
-    deleteCustomer: (id) => dispatch( deleteCustomer(id) )
+    deleteCustomer: (id) => dispatch( deleteCustomer(id) ),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Customers);
