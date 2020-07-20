@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types'
-import './customers.css';
 import { connect } from "react-redux";
 import Customer from '../Presentational/Customer.js';
-import CustomerInfoContainer from './CustomerInfoContainer'
-import { setCustomers, deleteCustomer } from "../Actions/CustomersActions"
+import CustomerInfoContainer from './CustomerInfoContainer';
+import { setCustomers, deleteCustomer } from "../Actions/CustomersActions";
+import styles from "./styles";
+
 
 class Customers extends Component {
 
@@ -30,9 +31,9 @@ class Customers extends Component {
             return <div>Loading...</div>;
         }
         return(
-        <ul>
+        <ul >
             {customers.map(customer =>
-                <li key={customer.id}>
+                <li key={customer.id} style={styles.liCustomer}>
                     <Customer firstName={customer.firstName} lastName={customer.lastName} 
                         onDeleteCustomer={() => this.props.deleteCustomer(customer.id)}
                         isDeleting = {deletingCustomers.includes(customer.id)}
@@ -65,5 +66,6 @@ const mapDispatchToProps = (dispatch) => ({
     setCustomers: () => dispatch( setCustomers() ),
     deleteCustomer: (id) => dispatch( deleteCustomer(id) ),
 });
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(Customers);

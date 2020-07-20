@@ -1,17 +1,19 @@
 import React from 'react';
-import logo from './logo.svg';
 import Customers from './components/customers/Containers/CustomersContainer';
-import './App.css';
 import { Provider } from "react-redux";
 import store from "./store/store";
+import { ThemeProvider } from '@material-ui/core/styles';
+import theme from './theme.js';
 
 let appStore = new store().getStore();
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
+    <div>
+      <header >
         <Provider store = {appStore}>
-          <Customers />
+          <ThemeProvider theme = {theme}>
+            <Customers />
+          </ThemeProvider>
         </Provider>
       </header>
     </div>

@@ -1,30 +1,78 @@
-import React from 'react'
-import { Field, reduxForm } from 'redux-form'
+import React from 'react';
+import { Field, reduxForm } from 'redux-form';
+import {TextField, Button} from '@material-ui/core';
+const FIRST_NAME = "firstName";
+const LAST_NAME = "lastName";
+const EMAIL = 'email';
+
+const validate = values => {
+  const errors = {}
+  const requiredFields = [
+    FIRST_NAME,
+    LAST_NAME,
+    EMAIL,
+  ]
+  requiredFields.forEach(field => {
+    if (!values[field]) {
+      errors[field] = 'Required'
+    }
+  })
+  if (
+    values.email &&
+    !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
+  ) {
+    errors.email = 'Invalid email address'
+  }
+  return errors
+}
+
+
+const renderTextField = ({
+  label,
+  input,
+  meta: { touched, invalid, error },
+  ...custom
+}) => (
+  <TextField
+    label={label}
+    placeholder={label}
+    error={touched && invalid}
+    helperText={touched && error}
+    {...input}
+    {...custom}
+  />
+)
 
 let CustomerInfoForm = props => {
-    const { handleSubmit, isAdding } = props
+    const { handleSubmit, isAdding, pristine, submitting } = props
     return (
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="firstName">First Name</label>
-          <Field name="firstName" component="input" type="text" />
+          <Field
+            name={FIRST_NAME}
+            component={renderTextField}
+            label="First Name"
+          />
         </div>
         <div>
-          <label htmlFor="lastName">Last Name</label>
-          <Field name="lastName" component="input" type="text" />
+          <Field
+              name={LAST_NAME}
+              component={renderTextField}
+              label="Last Name"
+          />
         </div>
         <div>
-          <label htmlFor="email">Email</label>
-          <Field name="email" component="input" type="email" />
+          <Field name={EMAIL} component={renderTextField} label="Email" />
         </div>
-        <button type="submit">Submit</button> { isAdding ? "PROCESSING": "" }
+        <Button type="submit"  variant="contained" disabled={pristine || submitting}>Submit</Button> { isAdding ? "PROCESSING": "" }
       </form>
     )
 }
 
 CustomerInfoForm = reduxForm({
   // a unique name for the form
-  form: 'CustomerInfo'
+  form: 'CustomerInfo',
+  validate
 })(CustomerInfoForm)
 
 export default CustomerInfoForm

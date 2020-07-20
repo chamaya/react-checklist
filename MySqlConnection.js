@@ -10,13 +10,14 @@ class MySqlConnection{
             database: 'test',
         })
         if(query && callback){
-            this.quickStart(query, callback)
+            this.quickQuery(query, callback)
         }
     }
 
-    quickStart(query, callback){
+    quickQuery(query, callback){
         this.initConnection();
         this.initQuery(query, callback);
+        this.endConnection();
     }
 
     initConnection(){
@@ -26,6 +27,9 @@ class MySqlConnection{
 
     initQuery(query, callback){
         this.connection.query(query, callback);
+    }
+
+    endConnection(){
         this.connection.end()
     }
 }
