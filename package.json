@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/chamaya/react-checklist#readme",
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "babel-preset-env": "^1.7.0",
     "body-parser": "^1.19.0",
     "concurrently": "^5.2.0",
